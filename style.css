@@ -12,7 +12,7 @@
   --header-h: 72px;
   --section-pad-y: 80px;
   --snap-gap: 18px;        /* header 여유 */
-
+  --section-pad-y: 56px;  /* ✅ 80 → 56 추천(또는 48) */
 }
 
 /* =========================
@@ -29,7 +29,7 @@
 =========================== */
 html{
   scroll-behavior: smooth; 
-  scroll-padding-top: calc(var(--header-h) + var(--snap-gap));
+  /* scroll-padding-top: calc(var(--header-h) + var(--snap-gap)); 앵커 보정은 JS로 할 거라면 이건 제거/주석 */ 
   
 }
 
@@ -48,17 +48,6 @@ body{
   max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 var(--pad-x);
-}
-
-/* =========================
-   Behavior: Anchor offset
-=========================== */
-
-/* anchor 이동 시 header에 가려지는 문제 방지 */
-section{
-  scroll-margin-top: calc(var(--header-h) + 18px);
-  padding: var(--section-pad-y) 0;
-  min-height: 100vh;
 }
 
 /* =========================
@@ -222,6 +211,12 @@ section{
   scroll-snap-stop: always;
 }
 
+/* 내용만 헤더 아래로 내려오게 하기 위한 설정 (이전 방식 주석 처리)
+.section >.container {
+  scroll-margin-top: calc(var(--header-h) + 18px);
+}
+ */
+
 /* =========================
    Hero - Hero 전용 영역
 =========================== */
@@ -236,7 +231,6 @@ section{
 =========================== */
 
 .section.project{
-  min-height: 120vh; /* 한 화면보다 조금 더 */
   padding-top: calc(var(--section-pad-y) + 10px);
 }
 
@@ -245,7 +239,7 @@ section{
 =========================== */
 
 .section.skills{
-  min-height: 90vh;
+  padding-top: calc(var(--section-pad-y) + 10px);
 }
 
 /* =========================
@@ -253,7 +247,7 @@ section{
 =========================== */
 
 .section.about{
-  min-height: auto;
+  padding-top: calc(var(--section-pad-y) + 10px);
 }
 
 /* =========================
@@ -261,7 +255,7 @@ section{
 =========================== */
 
 .section.contact{
-  min-height: auto;
+  padding-top: calc(var(--section-pad-y) + 10px);
 }
 
 
