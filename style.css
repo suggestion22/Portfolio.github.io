@@ -10,6 +10,8 @@
   --pad-x: 24px;
 
   --header-h: 72px;
+  --section-pad-y: 80px;
+  --snap-gap: 18px;        /* header 여유 */
 
 }
 
@@ -25,12 +27,18 @@
 /* =========================
    Base (document defaults)
 =========================== */
-html{ scroll-behavior: smooth; }
+html{
+  scroll-behavior: smooth; 
+  scroll-padding-top: calc(var(--header-h) + var(--snap-gap));
+  
+}
 
 body{
   font-family: 'Segoe UI', Arial, sans-serif;
   background: var(--c-bg);
   color: var(--c-text);
+
+  scroll-snap-type: y mandatory;
 }
 
 /* =========================
@@ -49,6 +57,8 @@ body{
 /* anchor 이동 시 header에 가려지는 문제 방지 */
 section{
   scroll-margin-top: calc(var(--header-h) + 18px);
+  padding: var(--section-pad-y) 0;
+  min-height: 100vh;
 }
 
 /* =========================
@@ -67,6 +77,7 @@ section{
 =========================== */
 
 .nav{
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -76,7 +87,6 @@ section{
 /* =========================
    Brand / Logo - 왠쪽 위에 있는 포토폴리오 이름!
 =========================== */
-
 .logo{
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 800;
@@ -204,34 +214,55 @@ section{
 /* =========================
    Sections - Hero, Project, Skills, About, Contact의 기본 틀
 =========================== */
-.hero,
-.project,
-.skills,
-.about,
-.contact{
-  min-height: 320px;
-  padding: 80px 0;
+.section{
+  padding: var(--section-pad-y) 0;
+  min-height: 100vh;
+
+  scroll-snap-align: start; 
+  scroll-snap-stop: always;
 }
 
 /* =========================
-   Hero
+   Hero - Hero 전용 영역
 =========================== */
 
+.section.hero{
+  min-height: calc(100vh - var(--header-h));
+  padding-top: calc(var(--section-pad-y) + 10px);
+}
 
 /* =========================
-   Projects
+   Projects - 프로젝트 전용 영역
 =========================== */
 
+.section.project{
+  min-height: 120vh; /* 한 화면보다 조금 더 */
+  padding-top: calc(var(--section-pad-y) + 10px);
+}
 
 /* =========================
-   Skills
+   Skills - 스킬 전용 영역
 =========================== */
+
+.section.skills{
+  min-height: 90vh;
+}
 
 /* =========================
-   About
+   About - 소개 전용 영역
 =========================== */
 
+.section.about{
+  min-height: auto;
+}
 
+/* =========================
+   Contact - 연락처 전용 영역
+=========================== */
+
+.section.contact{
+  min-height: auto;
+}
 
 
 /* =========================
