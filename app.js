@@ -130,11 +130,11 @@
 
 
   // ===== Nav anchor scroll fix (avoid previous section showing) =====
-const getHeaderH = () =>
+  const getHeaderH = () =>
   parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 0;
 
-document.querySelectorAll('.nav-menu a, .logo[href^="#"]').forEach((a) => {
-  a.addEventListener('click', (e) => {
+  document.querySelectorAll('.nav-menu a, .logo[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
     const href = a.getAttribute('href');
     if (!href || !href.startsWith('#')) return;
 
@@ -151,6 +151,51 @@ document.querySelectorAll('.nav-menu a, .logo[href^="#"]').forEach((a) => {
     // 해시도 업데이트(뒤로가기/공유용)
     history.pushState(null, '', href);
   });
+});
+
+// ===== Header transform on scroll =====
+const header = document.querySelector('.header');
+
+const setHeaderState = () => {
+  if (!header) return;
+  // 40~80 사이에서 취향으로 조절
+  const compact = window.scrollY > 60;
+  header.classList.toggle('is-compact', compact);
+};
+
+setHeaderState();
+window.addEventListener('scroll', setHeaderState, { passive: true });
+
+// ===== Scroll Spy (highlight current section) =====
+const sections = document.querySelectorAll('main .section');
+const navLinks = document.querySelectorAll('.nav-menu a[href^="#"]');
+
+const setActiveNav = (id) => {
+  navLinks.forEach((a) => {
+    a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+  });
+};
+
+const spyObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setActiveNav(entry.target.id);
+      }
+    });
+  },
+  {
+    // 헤더 높이를 고려해서 "실제로 보고 있는 섹션" 기준
+    rootMargin: `-${parseInt(
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--header-h')
+    ) || 72}px 0px -60% 0px`,
+    threshold: 0.2,
+  }
+);
+
+sections.forEach((sec) => {
+  if (sec.id) spyObserver.observe(sec);
 });
 
 })();
