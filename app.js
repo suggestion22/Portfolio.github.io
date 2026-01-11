@@ -16,7 +16,7 @@
   const menu = $('#colorDropdown');
 
   const rootEl = document.documentElement;
-  
+
   const rgbToHex = (rgb) => {
     const m = rgb && rgb.match(/\d+/g);
     if (!m || m.length < 3) return (rgb || '').trim();
@@ -128,5 +128,29 @@
     { passive: true }
   );
 
+
+  // ===== Nav anchor scroll fix (avoid previous section showing) =====
+const getHeaderH = () =>
+  parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 0;
+
+document.querySelectorAll('.nav-menu a, .logo[href^="#"]').forEach((a) => {
+  a.addEventListener('click', (e) => {
+    const href = a.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+
+    const target = document.querySelector(href);
+    if (!target) return;
+
+    e.preventDefault();
+
+    const headerH = getHeaderH();
+    const y = target.getBoundingClientRect().top + window.scrollY - headerH;
+
+    window.scrollTo({ top: y, behavior: 'smooth' });
+
+    // 해시도 업데이트(뒤로가기/공유용)
+    history.pushState(null, '', href);
+  });
+});
 
 })();
